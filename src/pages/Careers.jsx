@@ -1,9 +1,9 @@
 import "./Pages.css";
 
-function Services() {
+function Careers() {
     return (
         <div className="page-container">
-            <h2>Our Services</h2>
+            <h2>Our Careers</h2>
             <p>
                 GSV Electronics offers end-to-end electronics manufacturing services:
                 prototyping, PCB assembly (SMT / THT), testing, quality assurance and repair.
@@ -28,4 +28,4 @@ function Services() {
         </div>
     );
 }
-export default Services;
+export default Careers;

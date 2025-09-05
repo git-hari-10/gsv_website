@@ -5,7 +5,7 @@ function Home() {
         <section className="hero">
             <h2>Welcome to GSV Electronics</h2>
             <p>Your trusted partner in Electronics Manufacturing & Services</p>
-            <a href="/services" className="btn">Explore Our Services</a>
+            <a href="/src/pages/Careers" className="btn">Explore Our Services</a>
         </section>
     );
 }

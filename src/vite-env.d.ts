@@ -1,0 +1,16 @@
+declare module "*.gif";
+declare module "*.webp";
+declare module "*.avif";
+declare module "*.mp4";
+declare module "*.webm";
+declare module "*.mp3";
+declare module "*.wav";
+declare module "*.ogg";
+declare module "*.woff";
+declare module "*.woff2";
+declare module "*.ttf";
+declare module "*.eot";
+declare module "*.svg";
+declare module "*.png"
+declare module "*.jpg";
+declare module "*.jpeg";
