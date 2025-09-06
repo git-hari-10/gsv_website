@@ -1,6 +1,12 @@
-.footer {
-    background: #222;
-    color: #fff;
+.footer{
+    background: linear-gradient(180deg,#02141f,#031b2a);
+    color: #c7d7e6;
+    padding: 18px 10px;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    font-size: 14px;
+}
+.footer-inner{
+    max-width: 1200px;
+    margin: 0 auto;
     text-align: center;
-    padding: 15px 0;
 }
