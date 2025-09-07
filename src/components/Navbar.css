@@ -1,181 +1,179 @@
 :root{
-    --nav-dark:#04263a;
-    --nav-dark-2:#053f6b;
-    --accent:#ffb400;
-    --muted:#9fb6c6;
-    --white:#ffffff;
-    --glass: rgba(255,255,255,0.05);
+    --nav-height: 72px;
+    --glass-bg: rgba(8, 18, 20, 0.25); /* initial glass tint for dark hero */
+    --glass-border: rgba(255,255,255,0.06);
+    --light-bg: rgba(255,255,255,0.92);
+    --accent: #f0b21a; /* call-to-action color (yellow) */
 }
 
-/* prevent horizontal overflow */
-html,body { overflow-x:hidden; }
-
-/* NAVBAR - fixed on top, transparent initially */
-.navbar{
+/* Base navbar (fixed) */
+.navbar {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    padding: 12px 20px;
+    right: 0;
+    z-index: 1200;
+    height: var(--nav-height);
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: transparent;
-    z-index: 1000;
-    transition: background 300ms ease, box-shadow 300ms ease, padding 220ms ease;
-    will-change: background, box-shadow;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: linear-gradient(to bottom, rgba(8,18,20,0.30), rgba(8,18,20,0.16));
+    border-bottom: 1px solid var(--glass-border);
+    transition: background .22s ease, box-shadow .22s ease, color .22s ease, padding .18s ease;
 }
 
-/* when scrolled (solid background + shadow) */
-.navbar.scrolled{
-    background: linear-gradient(180deg, rgba(4,34,53,0.94), rgba(4,34,53,0.96));
-    box-shadow: 0 6px 28px rgba(0,0,0,0.25);
-    padding: 8px 20px;
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
+/* When scrolled past threshold, switch to light/opaque navbar (good for white pages) */
+.navbar.scrolled {
+    background: var(--light-bg);
+    color: #111;
+    box-shadow: 0 6px 22px rgba(16,24,32,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
-/* nav inner container */
+/* Container - controls left/right padding nicely */
 .nav-container{
     width: 100%;
-    max-width: 1200px;
+    max-width: 1240px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 18px;
+    padding: 10px 20px; /* adjust left/right padding here */
+}
+
+/* Logo area */
+.logo-link {
+    display: flex;
     gap: 12px;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;
 }
 
-/* brand (logo + text) */
-.brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--white); }
-.logo-wrap{
-    width:52px; height:52px; border-radius:999px; overflow:hidden;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05));
-    display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 6px 16px rgba(2,6,15,0.45);
-    padding:6px; transition: transform .22s ease, box-shadow .22s ease;
+.logo-img{
+    height: 52px; /* default logo size - larger than before */
+    width: auto;
+    display: block;
 }
-.logo-wrap:hover { transform: translateY(-3px); }
-.logo-img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
 
-/* logo color swap when scrolled:
-   we invert logo on transparent navbar if logo is dark.
-   If your logo is already white, remove filter. */
-.navbar:not(.scrolled) .logo-img { filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45)); }
-.navbar.scrolled .logo-img { filter: none; }
+/* Company name - visible on desktop, hidden on narrow screens to save space */
+.company-name{
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+    display: none; /* shown on desktop only */
+}
 
-/* brand text: full vs short for small screens */
-.brand-text { display:flex; flex-direction:column; line-height:1; }
-.brand-text .full{ font-weight:700; font-size:16px; color:var(--white); }
-.brand-text .short{ display:none; font-weight:700; color:var(--white); }
-
-/* NAV LINKS (desktop) */
+/* Nav links - desktop style */
 .nav-links {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+.nav-links ul{
     display:flex;
-    gap:18px;
-    align-items:center;
+    gap: 22px;
     list-style:none;
     margin:0;
     padding:0;
+    align-items:center;
 }
-.nav-links a {
-    color:var(--white);
+.nav-links a{
     text-decoration:none;
+    color:inherit;
     font-weight:600;
-    padding:8px 10px;
-    border-radius:8px;
-    transition: all .18s ease;
+    padding:6px 8px;
+    border-radius:6px;
 }
-.nav-links a:hover {
-    background:var(--glass);
-    color:var(--accent);
-    transform:translateY(-3px);
-}
-
-/* CTA button at the end of nav */
-.nav-links .cta {
-    background: linear-gradient(90deg,var(--accent), #ffd35a);
-    color:#071225;
-    padding:9px 14px;
+.nav-links a.cta {
+    background: var(--accent);
+    color: #111;
+    padding:10px 16px;
     border-radius:10px;
-    font-weight:800;
-    box-shadow: 0 6px 18px rgba(4,90,140,0.12);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
 }
 
-/* HAMBURGER (mobile) */
+/* Hamburger (hidden on large screens) */
 .hamburger{
-    display:none;
-    background:none; border:0; width:48px; height:48px;
-    cursor:pointer; align-items:center; justify-content:center;
+    display: none;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
 }
-.hamburger .hamburger-lines,
-.hamburger .hamburger-lines:before,
-.hamburger .hamburger-lines:after {
-    display:block; width:22px; height:3px; background:var(--white); border-radius:3px; position:relative; transition: all .28s ease;
+.hamburger:focus{ outline: 2px solid rgba(0,0,0,0.12); }
+
+.hamburger-line{
+    display:block;
+    height:2px;
+    width:22px;
+    background-color: currentColor;
+    margin:4px 0;
+    border-radius:2px;
+    transition: transform .22s ease, opacity .18s ease;
 }
-.hamburger .hamburger-lines:before { content:""; position:absolute; top:-7px; left:0; }
-.hamburger .hamburger-lines:after { content:""; position:absolute; top:7px; left:0; }
-.hamburger.is-active .hamburger-lines { transform: rotate(45deg); }
-.hamburger.is-active .hamburger-lines:before { top:0; transform: rotate(90deg); }
-.hamburger.is-active .hamburger-lines:after { top:0; opacity:0; }
+.hamburger.is-open .hamburger-line:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+.hamburger.is-open .hamburger-line:nth-child(2){ opacity: 0; }
+.hamburger.is-open .hamburger-line:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
 
-/* MOBILE NAV: slide panel & overlay */
+/* Mobile behavior */
+@media (max-width: 1023px){
+    .company-name { display: none; } /* hide long name on tablet/phone */
+    .logo-img { height: 46px; }
 
-@media (max-width:900px) {
+    .hamburger { display: inline-flex; color: white; margin-left: auto; z-index: 1215; }
 
-    /* show hamburger and hide normal links in the layout */
-    .hamburger { display:flex; z-index:1600; } /* keep above overlay */
-
+    /* Off-canvas side menu */
     .nav-links{
         position: fixed;
         top: 0;
-        right: 0;
+        right: -360px; /* off-screen */
+        width: 340px;
         height: 100vh;
-        width: 320px;
-        background: linear-gradient(180deg,#022536,#033e57);
-        padding: 96px 20px;
+        display: flex;
         flex-direction: column;
-        gap: 14px;
-
-        /* make sure the panel sits above the overlay */
-        z-index: 1605;
-
-        /* off-screen by default */
-        transform: translateX(100%);
-        transition: transform .36s cubic-bezier(.2,.9,.2,1);
-        box-shadow: -12px 0 32px rgba(2,6,15,0.6);
+        align-items: flex-start;
+        padding: 72px 22px; /* push content below header */
+        background: linear-gradient(180deg, rgba(6,30,36,0.98), rgba(6,30,36,0.96));
+        box-shadow: -8px 0 30px rgba(0,0,0,0.4);
+        transition: right .32s cubic-bezier(.2,.9,.3,1);
+        z-index: 1220; /* above overlay */
+        pointer-events: auto;
     }
-    .nav-links.active { transform: translateX(0); }
 
-    .nav-links a { padding:12px 10px; font-size:15px; color: #e9f6ff; }
-    .nav-links a:hover { color: var(--accent); background: transparent; transform: none; }
+    .nav-links ul { flex-direction: column; gap: 16px; width:100%; }
+    .nav-links a { display:block; width:100%; padding:12px 14px; color: #f3f6f6; font-size:18px; }
+    .nav-links a.cta{ background: var(--accent); color: #111; width: fit-content; padding:10px 18px; border-radius:8px; }
 
-    /* overlay sits below the panel but above the page content */
-    .nav-overlay {
+    /* Show side menu when active */
+    .nav-links.active { right: 0; }
+
+    /* Overlay (click to close) */
+    .mobile-overlay {
+        display: none;
+    }
+    .mobile-overlay.show {
+        display: block;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.45);
-        z-index: 1600;    /* less than .nav-links so panel is clickable */
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity .22s ease;
-    }
-    .nav-overlay.show {
-        opacity: 1;
-        pointer-events: auto; /* allow click to close */
+        background: rgba(0,0,0,0.34);
+        z-index: 1210; /* below nav-links but above page content */
+        pointer-events: auto;
     }
 }
 
-/* ensure hamburger icon is clickable above everything */
-.hamburger { position: relative; z-index: 1700; }
+/* Desktop tweaks: left alignment and less padding for logo/company */
+@media (min-width: 1024px){
+    .company-name { display: inline-block; color: white; font-size: 16px; }
+    .logo-img { height: 56px; }
 
-
-/* tiny screens */
-@media (max-width:420px){
-    .logo-wrap{ width:44px; height:44px; }
-    .brand-text .short{ font-size:14px; }
+    .nav-container { padding: 10px 28px; }
+    .nav-links a { color: #fff; }
+    .navbar.scrolled .nav-links a { color: #111; }
+    .navbar.scrolled .company-name { color: #111; }
 }
-
-/* utility: ensure content below navbar doesn't hide (add top padding on pages) */
-.site-offset { padding-top: 78px; }    /* add this class to main container or body wrapper if needed */

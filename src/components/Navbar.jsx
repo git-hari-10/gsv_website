@@ -1,64 +1,70 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+
 import logo from "../assets/gsvlogo.png";
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 60);
+        document.body.style.overflow = open ? "hidden" : "";
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [open]);
+
+
+    useEffect(() => {
+        const onScroll = () => {
+            const nav = document.querySelector(".navbar");
+            if (!nav) return;
+            if (window.scrollY > 24) nav.classList.add("scrolled");
+            else nav.classList.remove("scrolled");
+        };
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // lock body scroll when menu is open
-    useEffect(() => {
-        document.body.style.overflow = open ? "hidden" : "";
-    }, [open]);
-
     return (
-        <>
-            {/* overlay for mobile menu */}
-            <div
-                className={`nav-overlay ${open ? "show" : ""}`}
-                onClick={() => setOpen(false)}
-                aria-hidden={!open}
-            />
+        <header className="navbar" role="banner">
+            <div className="nav-container">
+                <Link to="/" className="logo-link" onClick={() => setOpen(false)}>
+                    <img src={logo} alt="GSV Drones logo" className="logo-img" />
+                    <span className="company-name">GSV Drones Research &amp; Development Organization</span>
+                </Link>
 
-            <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
-                <div className="nav-container">
-                    <Link to="/" className="brand" onClick={() => setOpen(false)}>
-                        <div className="logo-wrap">
-                            <img src={logo} alt="GSV Logo" className="logo-img" />
-                        </div>
-                        <div className="brand-text">
-                            <span className="full">GSV Drones Research &amp; Development Organization</span>
-                            <span className="short">GSV Drones R&amp;D</span>
-                        </div>
-                    </Link>
-
-                    <button
-                        className={`hamburger ${open ? "is-active" : ""}`}
-                        onClick={() => setOpen(v => !v)}
-                        aria-label="Toggle navigation"
-                        aria-expanded={open}
-                    >
-                        <span className="hamburger-lines" />
-                    </button>
-
-                    <ul className={`nav-links ${open ? "active" : ""}`} role="menu">
+                <nav className={`nav-links ${open ? "active" : ""}`} role="navigation" aria-label="Main navigation">
+                    <ul>
                         <li><Link to="/" onClick={() => setOpen(false)}>Home</Link></li>
                         <li><Link to="/about" onClick={() => setOpen(false)}>About</Link></li>
                         <li><Link to="/careers" onClick={() => setOpen(false)}>Careers</Link></li>
                         <li><Link to="/products" onClick={() => setOpen(false)}>Products</Link></li>
                         <li><Link to="/blog" onClick={() => setOpen(false)}>News/Blog</Link></li>
-                        <li><Link to="/contact" onClick={() => setOpen(false)} className="cta">Contact Us</Link></li>
+                        <li><Link to="/contact" className="cta" onClick={() => setOpen(false)}>Contact Us</Link></li>
                     </ul>
-                </div>
-            </nav>
-        </>
+                </nav>
+
+                {/* hamburger button - accessible */}
+                <button
+                    className={`hamburger ${open ? "is-open" : ""}`}
+                    aria-label={open ? "Close menu" : "Open menu"}
+                    aria-expanded={open}
+                    onClick={() => setOpen(v => !v)}
+                >
+                    <span className="hamburger-line" />
+                    <span className="hamburger-line" />
+                    <span className="hamburger-line" />
+                </button>
+
+                {/* overlay (click outside to close) */}
+                <div
+                    className={`mobile-overlay ${open ? "show" : ""}`}
+                    onClick={() => setOpen(false)}
+                    aria-hidden={!open}
+                />
+            </div>
+        </header>
     );
 }
