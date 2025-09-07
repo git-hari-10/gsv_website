@@ -14,7 +14,6 @@ export default function Navbar() {
         };
     }, [open]);
 
-
     useEffect(() => {
         const onScroll = () => {
             const nav = document.querySelector(".navbar");
@@ -31,8 +30,12 @@ export default function Navbar() {
         <header className="navbar" role="banner">
             <div className="nav-container">
                 <Link to="/" className="logo-link" onClick={() => setOpen(false)}>
-                    <img src={logo} alt="GSV Drones logo" className="logo-img" />
-                    <span className="company-name">GSV Drones Research &amp; Development Organization</span>
+                    <div className="logo-wrap">
+                        <img src={logo} alt="GSV Drones logo" className="logo-img" />
+                    </div>
+                    <span className="company-name">
+                        GSV Drones Research &amp; Development Organization
+                    </span>
                 </Link>
 
                 <nav className={`nav-links ${open ? "active" : ""}`} role="navigation" aria-label="Main navigation">
@@ -46,19 +49,19 @@ export default function Navbar() {
                     </ul>
                 </nav>
 
-                {/* hamburger button - accessible */}
                 <button
-                    className={`hamburger ${open ? "is-open" : ""}`}
+                    className={`hamburger ${open ? "is-active" : ""}`}
                     aria-label={open ? "Close menu" : "Open menu"}
                     aria-expanded={open}
                     onClick={() => setOpen(v => !v)}
                 >
-                    <span className="hamburger-line" />
-                    <span className="hamburger-line" />
-                    <span className="hamburger-line" />
+                    <span className="hamburger-lines" aria-hidden="true">
+                        <span className="hamburger-line" />
+                        <span className="hamburger-line" />
+                        <span className="hamburger-line" />
+                    </span>
                 </button>
 
-                {/* overlay (click outside to close) */}
                 <div
                     className={`mobile-overlay ${open ? "show" : ""}`}
                     onClick={() => setOpen(false)}

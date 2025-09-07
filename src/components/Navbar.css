@@ -1,9 +1,9 @@
 :root{
     --nav-height: 72px;
-    --glass-bg: rgba(8, 18, 20, 0.25); /* initial glass tint for dark hero */
+    --glass-bg: rgba(8, 18, 20, 0.25);
     --glass-border: rgba(255,255,255,0.06);
     --light-bg: rgba(255,255,255,0.92);
-    --accent: #f0b21a; /* call-to-action color (yellow) */
+    --accent: #f0b21a;
 }
 
 /* Base navbar (fixed) */
@@ -33,6 +33,7 @@
 
 /* Container - controls left/right padding nicely */
 .nav-container{
+    position: relative;
     width: 100%;
     max-width: 1240px;
     margin: 0 auto;
@@ -43,6 +44,82 @@
 }
 
 /* Logo area */
+
+/* --- Logo wrap with rounded blur + hover animation --- */
+.logo-wrap {
+    position: relative;
+    width: 62px;
+    height: 65px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+    box-shadow: 0 6px 16px rgba(2,6,15,0.35);
+    transition: transform .40s cubic-bezier(.2,.9,.25,1), box-shadow .28s ease;
+}
+
+/* blurred glowing border */
+.logo-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    box-shadow: 0 10px 30px rgba(2,6,15,0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    transform: rotate(0deg) scale(1);
+    transition: opacity .32s ease, transform .45s cubic-bezier(.2,.9,.25,1);
+    pointer-events: none;
+}
+
+/* logo image itself */
+.logo-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform .40s cubic-bezier(.2,.9,.25,1);
+}
+
+/* Hover/Focus: animate cross-rotate + scale */
+.logo-wrap:hover,
+.logo-wrap:focus-within {
+    transform: rotate(14deg) scale(1.06);
+    box-shadow: 0 14px 36px rgba(2,6,15,0.36);
+}
+.logo-wrap:hover::before,
+.logo-wrap:focus-within::before {
+    opacity: 1;
+    transform: rotate(-14deg) scale(1.02);
+}
+.logo-wrap:hover .logo-img,
+.logo-wrap:focus-within .logo-img {
+    transform: rotate(-6deg) scale(0.98);
+}
+
+/* Pressed feedback */
+.logo-wrap:active {
+    transform: rotate(10deg) scale(1.04);
+    transition-duration: .18s;
+}
+.logo-wrap:active .logo-img {
+    transform: rotate(-4deg) scale(0.975);
+    transition-duration: .18s;
+}
+
+/* Accessibility: no animation if user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .logo-wrap, .logo-wrap::before, .logo-img {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
+
 .logo-link {
     display: flex;
     gap: 12px;
@@ -95,38 +172,66 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.08);
 }
 
-/* Hamburger (hidden on large screens) */
+/* --- Corrected Hamburger: 3-line flex-style --- */
 .hamburger{
-    display: none;
-    margin-left: 10px;
+    display: none;                 /* shown only in mobile media query below */
     background: transparent;
-    border: none;
-    cursor: pointer;
+    margin-right: 10px;
+    border: 0;
+    width: 48px;
+    height: 48px;
     padding: 8px;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1700;                 /* ensure it's above overlay */
+    transition: transform .18s ease;
 }
 .hamburger:focus{ outline: 2px solid rgba(0,0,0,0.12); }
 
-.hamburger-line{
-    display:block;
-    height:2px;
-    width:22px;
-    background-color: currentColor;
-    margin:4px 0;
-    border-radius:2px;
-    transition: transform .22s ease, opacity .18s ease;
+/* container for the 3 lines */
+.hamburger-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
-.hamburger.is-open .hamburger-line:nth-child(1){ transform: translateY(6px) rotate(45deg); }
-.hamburger.is-open .hamburger-line:nth-child(2){ opacity: 0; }
-.hamburger.is-open .hamburger-line:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+
+/* each bar */
+.hamburger-line {
+    display:block;
+    width: 26px;    /* length */
+    height: 3px;    /* thickness */
+    background-color: #ffffff;
+    border-radius: 3px;
+    transform-origin: center;
+    transition: transform .28s cubic-bezier(.2,.9,.3,1), opacity .2s ease;
+}
+
+/* active state -> morph to X */
+.hamburger.is-active .hamburger-line:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+.hamburger.is-active .hamburger-line:nth-child(2){ opacity: 0; transform: scaleX(0.5); }
+.hamburger.is-active .hamburger-line:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
 
 /* Mobile behavior */
 @media (max-width: 1023px){
     .company-name { display: none; } /* hide long name on tablet/phone */
     .logo-img { height: 46px; }
+    .logo-links { margin-right: 56px; }
 
-    .hamburger { display: inline-flex; color: white; margin-left: auto; z-index: 1215; }
+    /* show hamburger on mobile */
+    .hamburger {
+        position: absolute;
+        right: 16px;               /* distance from right edge - tweak as needed */
+        top: 50%;
+        transform: translateY(-50%);
+        margin-left: 0;            /* remove any leftover auto margin */
+        display: flex;             /* ensure visible on mobile */
+        z-index: 2000;
+    }
 
     /* Off-canvas side menu */
     .nav-links{
@@ -176,4 +281,13 @@
     .nav-links a { color: #fff; }
     .navbar.scrolled .nav-links a { color: #111; }
     .navbar.scrolled .company-name { color: #111; }
+}
+
+/* defensive rule: ensure logo not huge */
+.logo-img, img[class*="logo"], img[src*="gsvlogo"] {
+    max-height: 72px;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+    display: block;
 }
