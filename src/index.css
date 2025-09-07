@@ -27,3 +27,53 @@ a {
 .btn:hover {
   background: #003f7f;
 }
+
+/* ---------- Full-bleed hero fix (use when hero is inside centered container) */
+
+/* safety: box-sizing */
+html, body, #root, *::before, *::after { box-sizing: border-box; }
+
+/* ensure no default body gaps */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Make hero background truly full-bleed even when inside centered container.
+   This technique pulls the hero out of the page flow visually while keeping content centered. */
+.hero-landing {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-top: -20px;
+  margin-left: -50vw;   /* push left edge to viewport left */
+  margin-right: -50vw;  /* push right edge to viewport right */
+  width: 100vw;         /* full viewport width */
+  box-sizing: border-box;
+  padding: 0;           /* we keep inner padding in .hero-content */
+}
+
+/* Keep the hero content centered and limited to your normal max-width */
+.hero-landing .hero-content {
+  max-width: 1200px;    /* match your container width */
+  margin: 0 auto;
+  padding: 0 24px;      /* safe inner padding for text */
+  box-sizing: border-box;
+}
+
+/* If you have a wrapper that adds side padding for all pages, ensure the hero uses its own centering */
+.page-container.hero-full,
+.page-container.hero-full .hero-content {
+  max-width: 1200px;
+  padding: 0 24px;
+  margin: 0 auto;
+}
+
+/* final guard: prevent slight horizontal scrollbar caused by 100vw on mobile */
+@media (max-width: 480px) {
+  .hero-landing { margin-left: calc(-1 * (100vw - 100%)); margin-right: calc(-1 * (100vw - 100%)); }
+}
+

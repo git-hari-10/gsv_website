@@ -1,132 +1,429 @@
+/* ---------- Variables ---------- */
+:root{
+    --accent: #ffb400;
+    --accent-2: #ffd35a;
+    --muted: #7f99a6;
+    --text: #053140;
+    --nav-dark: #043a66;
+    --card-bg: #ffffff;
+    --page-bg: #f6fbfc;
+    --glass: rgba(255,255,255,0.04);
+    --rounded: 12px;
+    --shadow-1: 0 8px 22px rgba(2,6,15,0.06);
+    --shadow-2: 0 18px 40px rgba(2,8,20,0.08);
+    --max-width: 1200px;
+    --container-gap: 24px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+/* ---------- Base / layout ---------- */
+* { box-sizing: border-box; }
+html, body { height:100%; width:100%; overflow-x:hidden; background:var(--page-bg); }
 .page-container {
-    max-width: 1100px;
+    max-width: var(--max-width);
     margin: 30px auto;
     padding: 0 20px;
-    color: #06304a;
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: var(--text);
 }
 
-/* Hero */
-.hero {
-    text-align: center;
-    padding: 72px 20px;
-    background: linear-gradient(135deg,#003366,#0056b3);
-    color: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(1,12,30,0.28);
-    animation: fadeIn 0.9s ease both;
+/* utility */
+.muted { color: var(--muted); }
+.lead  { color:#224a59; font-size:16px; line-height:1.6; }
+
+/* ---------- HERO: full-width hero + responsive feature grid ---------- */
+.hero-advanced {
+    position: relative;
+    padding: 0;
+    overflow: visible;
+    background: transparent;
 }
 
-.hero h2 { font-size: 36px; margin-bottom: 10px; }
-.hero p { font-size: 18px; margin-bottom: 20px; }
+/* make hero card take full content width */
+.hero-inner {
+    display: block; /* stack hero and features vertically */
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
 
-/* Buttons */
+/* hero card: full width of container with controlled height */
+.hero-card {
+    width: 100%;
+    background: linear-gradient(180deg,#043a66 8%, #0b5b94 60%, #085fa8 100%);
+    color: #fff;
+    border-radius: var(--rounded);
+    padding: 28px 34px;
+    box-shadow: var(--shadow-2);
+    transition: transform .28s ease, box-shadow .28s ease;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    justify-content:center;
+    min-height: 200px;   /* reasonable desktop height */
+    max-height: 520px;
+    overflow: hidden;
+    margin-bottom: 28px;
+}
+
+/* hero text */
+.hero-card h1 {
+    font-size: clamp(20px, 2.4vw, 30px);
+    line-height: 1.06;
+    margin: 0 0 10px 0;
+    font-weight:800;
+    letter-spacing:.2px;
+}
+.hero-card .hero-lead {
+    font-size: clamp(13px, 1.2vw, 15px);
+    margin-bottom: 14px;
+    color: rgba(255,255,255,0.95);
+}
+
+/* hero CTAs */
+.hero-ctas { display:flex; gap:12px; flex-wrap:wrap; }
 .btn {
-    display:inline-block;
-    padding: 12px 20px;
-    background: linear-gradient(90deg,#ffcc00,#ffd853);
-    color: #021018;
-    border-radius: 10px;
-    font-weight:700;
-    text-decoration:none;
-    transition: transform .18s ease;
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:700;
+    box-shadow: 0 6px 18px rgba(2,8,20,0.08);
 }
-.btn:hover { transform: translateY(-4px); }
+.btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color:#071225; }
+.btn.outline { background: transparent; border:1px solid rgba(255,255,255,0.12); color:#fff; }
 
-/* Cards grid */
+/* optional small decorative accent behind hero (subtle) */
+.hero-decor {
+    position: absolute;
+    right: 2%;
+    top: 8%;
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), rgba(255,255,255,0) 40%), linear-gradient(135deg,#063246,#034a6b);
+    filter: blur(14px);
+    opacity: 0.08;
+    transform: rotate(-6deg);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ---------- FEATURE CARDS (grid under hero): 3 -> 2 -> 1 ---------- */
+.hero-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 20px;
+    align-items: start;
+    width: 100%;
+    margin: 0 auto 36px auto;
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+/* single feature style */
+.feature {
+    background: var(--card-bg);
+    color: #0b4b6a;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: var(--shadow-1);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-height: 140px;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.feature:hover { transform: translateY(-8px); box-shadow: 0 18px 36px rgba(2,6,15,0.12); }
+.feature i { font-size:20px; color: #0b4b6a; }
+
+/* text inside feature */
+.feature h4 { margin:0 0 8px 0; font-size:16px; font-weight:700; }
+.feature p { margin:0; color:#3f6b74; line-height:1.5; }
+
+/* ---------- generic cards grid used elsewhere ---------- */
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
+.card {
+    background: var(--card-bg);
+    padding:20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-1);
+    transition: transform .22s ease, box-shadow .22s ease;
+}
+.card:hover { transform: translateY(-6px); box-shadow: 0 14px 32px rgba(2,6,15,0.12); }
 
-/* Team scroller (new) */
+/* ---------- Team scroller (horizontal) ---------- */
 .team-section { margin-top: 34px; }
 .team-header h3 { font-size: 22px; margin-bottom: 6px; }
-.team-header .muted { color: #6b8796; margin-bottom:14px; }
+.team-header .muted { color: var(--muted); margin-bottom:14px; }
 
 .team-scroller {
-    display: flex;
-    gap: 18px;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    display: flex; gap: 18px; overflow-x: auto; padding-bottom: 8px;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
 }
-
-/* hide scrollbar but maintain accessibility */
 .team-scroller::-webkit-scrollbar { height: 8px; }
 .team-scroller::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 99px; }
 
-/* each card */
 .team-card {
-    flex: 0 0 260px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 8px 22px rgba(2,6,23,0.06);
-    transition: transform .22s ease, box-shadow .22s ease;
-    scroll-snap-align: start;
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
+    flex: 0 0 260px; background: var(--card-bg); border-radius: 12px; padding: 16px;
+    box-shadow: var(--shadow-1); transition: transform .22s ease, box-shadow .22s ease;
+    scroll-snap-align: start; display:flex; gap:12px; align-items:flex-start;
+}
+.team-card:hover { transform: translateY(-8px); box-shadow: 0 14px 32px rgba(2,6,15,0.12); }
+.avatar-placeholder { width:72px; height:72px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:#f0f8ff; flex-shrink:0; }
+
+/* ---------- Contact form ---------- */
+.contact-section {
+    padding: 8px 0 36px;
+    max-width: 920px;
+    margin: 0 auto;
 }
 
-.team-card:hover { transform: translateY(-8px); box-shadow: 0 14px 32px rgba(2,6,23,0.12); }
-
-.avatar-placeholder{
-    width:72px;
-    height:72px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#f0f8ff;
-    flex-shrink:0;
+.contact-section h2 {
+    margin: 6px 0 12px 0;
+    font-size: 26px;
+    color: #063246;
+    font-weight: 800;
 }
 
-.team-meta { min-width: 0; } /* allow text truncation */
-.team-name { font-size:16px; margin:0 0 4px 0; color:#032f4a; font-weight:700; }
-.team-role { font-size:13px; margin:0 0 8px 0; color:#6b8796; font-weight:600; }
-.team-bio { font-size:13px; margin:0; color:#476876; line-height:1.3; }
-
-/* page container defaults for other pages */
-.page-container h2 { font-size: 24px; color: #032f4a; margin-bottom:8px; }
-.page-container p.lead { color: #224a59; font-size:16px; }
-
-/* contact form & cards kept from your previous file */
-.contact-form {
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-    margin-top:20px;
-    max-width:500px;
+.contact-section .lead {
+    margin-bottom: 18px;
+    color: var(--muted);
 }
-.contact-form input, .contact-form textarea {
-    padding: 10px;
+
+/* Grid container: label on left, input on right (desktop) */
+.form-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr; /* label column, input column */
+    gap: 12px 18px; /* row-gap, column-gap */
+    align-items: start;
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+/* labels */
+.form-grid label {
+    align-self: center;
+    color: #0b4b6a;
+    font-weight: 700;
+    padding-top: 6px;
+    font-size: 15px;
+}
+
+/* For the message label we want it at top of textarea — add a helper class */
+.form-grid label.label-top { align-self: start; padding-top: 6px; }
+
+/* inputs and textarea */
+.form-grid input[type="text"],
+.form-grid input[type="email"],
+.form-grid textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
     border: 1px solid #d7e3ea;
-    border-radius: 8px;
-    font-size:14px;
+    background: #fff;
+    font-size: 14px;
+    color: #03313b;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: box-shadow .12s ease, border-color .12s ease, transform .08s ease;
+    resize: vertical;
 }
 
-/* utility muted */
-.muted { color:#6b8796; }
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity:0; transform: translateY(18px); } to { opacity:1; transform:translateY(0); }
+/* focus */
+.form-grid input:focus,
+.form-grid textarea:focus {
+    outline: none;
+    border-color: rgba(4,90,140,0.9);
+    box-shadow: 0 6px 18px rgba(3,90,140,0.08);
+    transform: translateY(-1px);
 }
 
-/* Responsive tweaks */
-@media (max-width: 900px) {
-    .hero { padding: 48px 16px; }
-    .page-container { padding: 0 14px; }
-    .team-card { flex: 0 0 220px; }
+/* form actions (submit) */
+.form-actions {
+    display:flex;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 6px;
 }
 
-@media (max-width: 480px) {
-    .hero h2 { font-size: 22px; }
+/* Primary full-width button utility */
+.btn.full { min-width: 240px; }
+.btn.primary.full {
+    background: linear-gradient(90deg,var(--accent),var(--accent-2));
+    color: #06121a;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(4,90,140,0.12);
+    text-align: center;
+}
+.btn.primary.full:hover { transform: translateY(-3px); box-shadow: 0 18px 36px rgba(4,90,140,0.14); }
+
+/* Make form compact on smaller screens: labels above inputs */
+@media (max-width: 860px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* single column */
+        gap: 10px 0;
+    }
+    .form-grid label {
+        align-self: start;
+        padding-top: 4px;
+    }
+    .form-actions { justify-content: stretch; }
+    .btn.primary.full { width: 100%; }
+}
+
+/* small touch targets for very small devices */
+@media (max-width: 420px) {
+    .form-grid input[type="text"],
+    .form-grid input[type="email"],
+    .form-grid textarea { padding: 10px 12px; }
+    .contact-section h2 { font-size: 22px; }
+}
+
+
+/* ---------- Footer small adjustments (if using shared Pages.css) ---------- */
+.footer-compact { margin-top: 40px; padding-bottom: 24px; }
+
+/* ---------- Utility classes ---------- */
+.muted { color: var(--muted); }
+.lead { color:#224a59; font-size:16px; line-height:1.6; }
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp { from {opacity:0; transform: translateY(8px);} to {opacity:1; transform:none;} }
+
+/* ---------- Responsive breakpoints ---------- */
+/* tablet */
+@media (max-width: 1000px) {
+    .hero-features { grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: 18px; }
+    .hero-card { min-height: 190px; padding:22px; }
+    .team-card { flex: 0 0 240px; }
+}
+
+/* mobile */
+@media (max-width: 600px) {
+    .hero-features { grid-template-columns: 1fr; gap: 14px; }
+    .hero-card { min-height: 150px; padding: 16px; }
+    .feature { min-height: auto; }
+    .page-container { margin: 14px auto; padding: 0 14px; }
+}
+
+/* very small */
+@media (max-width: 420px) {
+    .hero-card h1 { font-size: 18px; }
+    .hero-decor { display: none; }
     .team-card { flex: 0 0 200px; padding: 12px; }
-    .avatar-placeholder { width:60px; height:60px; }
+    .cards { grid-template-columns: 1fr; }
 }
+
+/* final guard to ensure no horizontal scroll */
+html, body { overflow-x: hidden; }
+
+
+/* ---------- Hero landing (full-page hero) ---------- */
+.hero-landing {
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+    padding-top: 80px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../../Public/drone.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-bottom: 40px;
+}
+
+.hero-landing .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            180deg,
+            rgba(4, 34, 53, 0.6),
+            rgba(4, 34, 53, 0.35)
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hero-landing .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 24px;
+}
+
+.hero-landing .hero-inner {
+    display: flex;
+    flex-direction: column;   /* stack everything */
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    gap: 24px;
+}
+
+.hero-landing .hero-left {
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 36px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.hero-landing h1 {
+    font-size: clamp(32px, 5vw, 64px); /* scale up */
+    margin-bottom: 16px;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.hero-landing .hero-sub {
+    font-size: clamp(16px, 2vw, 22px);
+    margin-bottom: 28px;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1.6;
+}
+
+.hero-ctas {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.hero-ctas .btn {
+    padding: 14px 26px;
+    border-radius: 12px;
+    font-size: clamp(14px, 1.2vw, 18px);
+    font-weight: 700;
+}
+
+/* hide search bubble on fullscreen hero */
+.hero-right,
+.hero-search {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-landing .hero-left {
+        padding: 24px;
+        text-align: center;
+        align-items: center;
+    }
+    .hero-landing .hero-inner {
+        align-items: center;
+    }
+}
+

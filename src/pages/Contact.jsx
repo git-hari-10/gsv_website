@@ -4,41 +4,67 @@ import { useState } from "react";
 function Contact() {
     const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-    function onChange(e) {
-        setForm((s) => ({ ...s, [e.target.name]: e.target.value }));
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setForm(f => ({ ...f, [name]: value }));
     }
 
-    function onSubmit(e) {
+    function handleSubmit(e) {
         e.preventDefault();
-        // just a dummy handler for now
-        alert(`Thanks ${form.name}! We'll contact you soon.`);
+        // TODO: integrate your backend / form handler
+        alert("Thanks! Message submitted — implement backend to send it for real.");
         setForm({ name: "", email: "", message: "" });
     }
 
     return (
         <div className="page-container">
-            <h2>Contact Us</h2>
-            <p>Reach out for quotes, partnerships or vendor inquiries.</p>
+            <section className="contact-section">
+                <h2>Contact Us</h2>
+                <p className="lead">Reach out for quotes, partnerships or vendor inquiries.</p>
 
-            <form className="contact-form" onSubmit={onSubmit}>
-                <label>
-                    Name
-                    <input name="name" value={form.name} onChange={onChange} required />
-                </label>
+                <form className="contact-form" onSubmit={handleSubmit} aria-label="Contact form">
+                    <div className="form-grid">
+                        <label htmlFor="name">Name</label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            value={form.name}
+                            onChange={handleChange}
+                            placeholder="Your full name"
+                            required
+                        />
 
-                <label>
-                    Email
-                    <input name="email" value={form.email} onChange={onChange} type="email" required />
-                </label>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={form.email}
+                            onChange={handleChange}
+                            placeholder="you@example.com"
+                            required
+                        />
 
-                <label>
-                    Message
-                    <textarea name="message" value={form.message} onChange={onChange} rows="5" required />
-                </label>
+                        <label htmlFor="message" className="label-top">Message</label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            value={form.message}
+                            onChange={handleChange}
+                            placeholder="Tell us about your request, timeline and contact details"
+                            rows="6"
+                            required
+                        />
+                    </div>
 
-                <button className="btn" type="submit">Send Message</button>
-            </form>
+                    <div className="form-actions">
+                        <button type="submit" className="btn primary full">Send Message</button>
+                    </div>
+                </form>
+            </section>
         </div>
     );
 }
+
 export default Contact;
